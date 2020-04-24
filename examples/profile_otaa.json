@@ -1,0 +1,16 @@
+{
+  "DeviceProfileID": "ExampleOTAA",
+  "SupportsClassB": true,
+  "ClassBTimeout": 15,
+  "PingSlotFrequency": 924.5,
+  "PingSlotDataRateIndex": 0,
+  "PingSlotPeriod": 128,
+  "SupportsClassC": true,
+  "ClassCTimeout": 15,
+  "MACVersion": "1.0.2",
+  "RegionalParametersVersion": "RP001-1.0.2-RevB",
+  "Region": "US902-928",
+  "SupportsJoin": true,
+  "MaxEIRP": 14,
+  "Supports32bitFCnt": true
+}

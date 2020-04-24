@@ -1,0 +1,276 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lorawan-schema.org/draft/onboarding/1/schema",
+  "title": "Onboarding LoRaWAN devices",
+  "description": "Onboarding end devices and gateways",
+
+  "definitions": {
+    "dataRateIndex": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 15,
+      "description": "Data rate index"
+    },
+    "frequency": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Frequency (MHz)"
+    },
+    "pingSlotPeriod": {
+      "type": "integer",
+      "enum": [32, 64, 128, 256, 512, 1024, 2048, 4096],
+      "description": "Ping slot period (seconds)"
+    },
+    "rxDelay": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 15
+    },
+    "rxDataRateOffset": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 7
+    },
+    "regionalParametersVersion": {
+      "type": "string",
+      "description": "Regional parameters version"
+    },
+
+    "endDeviceProfile": {
+      "title": "End Device Profile",
+      "description": "End device capabilities and boot parameters that are needed by the Network Server",
+      "type": "object",
+
+      "examples": [
+        {
+          "DeviceProfileID": "ExampleOTAA",
+          "SupportsClassB": true,
+          "ClassBTimeout": 15,
+          "PingSlotFrequency": 924.5,
+          "PingSlotDataRateIndex": 0,
+          "PingSlotPeriod": 128,
+          "SupportsClassC": true,
+          "ClassCTimeout": 15,
+          "MACVersion": "1.0.2",
+          "RegionalParametersVersion": "RP001-1.0.2-RevB",
+          "Region": "US902-928",
+          "SupportsJoin": true,
+          "MaxEIRP": 14,
+          "Supports32bitFCnt": true
+        },
+        {
+          "DeviceProfileID": "ExampleABP",
+          "SupportsClassB": false,
+          "SupportsClassC": false,
+          "MACVersion": "1.0.4",
+          "RegionalParametersVersion": "RP002-1.0.1",
+          "Region": "EU863-870",
+          "SupportsJoin": false,
+          "RX1Delay": 1,
+          "RX1DataRateOffset": 0,
+          "RX2DataRateIndex": 3,
+          "RX2Frequency": 869.525,
+          "FactoryPresetFrequencies": [868.1, 868.3, 868.5, 867.1, 867.3, 867.5, 867.7, 867.9],
+          "MaxEIRP": 14,
+          "MaxDutyCycle": 0.1,
+          "Supports32bitFCnt": true
+        }
+      ],
+
+      "properties": {
+        "DeviceProfileID": {
+          "type": "string",
+          "description": "ID of the Device Profile"
+        },
+        "SupportsClassB": {
+          "type": "boolean",
+          "description": "End device supports class B"
+        },
+        "ClassBTimeout": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Maximum delay for the end device to answer a MAC request or confirmed downlink frame (seconds)"
+        },
+        "PingSlotPeriod": { "$ref": "#/definitions/pingSlotPeriod" },
+        "PingSlotDataRateIndex": { "$ref": "#/definitions/dataRateIndex" },
+        "PingSlotFrequency": { "$ref": "#/definitions/frequency" },
+        "SupportsClassC": {
+          "type": "boolean",
+          "description": "End device supports class C"
+        },
+        "ClassCTimeout": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Maximum delay for the end device to answer a MAC request or confirmed downlink frame (seconds)"
+        },
+        "MACVersion": {
+          "type": "string",
+          "enum": ["1.0", "1.0.1", "1.0.2", "1.0.3", "1.0.4", "1.1"],
+          "description": "LoRaWAN version"
+        },
+        "RegionalParametersVersion": { "$ref": "#/definitions/regionalParametersVersion" },
+        "Region": {
+          "type": "string",
+          "enum": ["EU863-870", "US902-928", "CN779-787", "EU433", "AU915-928", "CN470-510", "AS923", "KR920-923", "IN865-867", "RU864-870"],
+          "description": "Region as defined in the Regional Parameters"
+        },
+        "SupportsJoin": {
+          "type": "boolean",
+          "description": "End device supports join (OTAA) or not (ABP)"
+        },
+        "RX1Delay": {
+          "$ref": "#/definitions/rxDelay",
+          "description": "RX1 delay"
+        },
+        "RX1DataRateOffset": {
+          "$ref": "#/definitions/rxDataRateOffset",
+          "description": "RX1 data rate offset"
+        },
+        "RX2DataRateIndex": {
+          "$ref": "#/definitions/dataRateIndex",
+          "description": "RX2 data rate index"
+        },
+        "RX2Frequency": {
+          "$ref": "#/definitions/frequency",
+          "description": "RX2 channel frequency"
+        },
+        "FactoryPresetFrequencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/frequency" },
+          "description": "List of factory preset frequencies"
+        },
+        "MaxEIRP": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Maximum EIRP (dBm)"
+        },
+        "MaxDutyCycle": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "examples": [0.1],
+          "description": "Maximum duty cycle"
+        },
+        "Supports32bitFCnt": {
+          "type": "boolean",
+          "description": "End device supports 32bit FCnt"
+        }
+      },
+      "additionalProperties": false,
+
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "SupportsClassB": { "const": true }
+            }
+          },
+          "then": {
+            "required": ["ClassBTimeout", "PingSlotPeriod", "PingSlotDataRateIndex", "PingSlotFrequency"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "SupportsClassC": { "const": true }
+            }
+          },
+          "then": {
+            "required": ["ClassCTimeout"]
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "MACVersion": { "const": "1.0" }
+            }
+          },
+          "then": {
+            "properties": {
+              "RegionalParametersVersion": { "enum": ["TS001-1.0"] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "MACVersion": { "const": "1.0.1" }
+            }
+          },
+          "then": {
+            "properties": {
+              "RegionalParametersVersion": { "enum": ["TS001-1.0.1"] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "MACVersion": { "const": "1.0.2" }
+            }
+          },
+          "then": {
+            "properties": {
+              "RegionalParametersVersion": { "enum": ["RP001-1.0.2", "RP001-1.0.2-RevB"] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "MACVersion": { "const": "1.0.3" }
+            }
+          },
+          "then": {
+            "properties": {
+              "RegionalParametersVersion": { "enum": ["RP001-1.0.3-RevA", "RP001-1.0.3-RevB"] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "MACVersion": { "const": "1.0.4" }
+            }
+          },
+          "then": {
+            "properties": {
+              "RegionalParametersVersion": { "enum": ["RP002-1.0.0", "RP002-1.0.1"] }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "MACVersion": { "const": "1.1" }
+            }
+          },
+          "then": {
+            "properties": {
+              "RegionalParametersVersion": { "enum": ["RP001-1.1-RevA", "RP001-1.1-RevB"] }
+            }
+          }
+        },
+
+        {
+          "if": {
+            "properties": {
+              "SupportsJoin": { "const": false }
+            }
+          },
+          "then": {
+            "required": ["RX1Delay", "RX1DataRateOffset", "RX2DataRateIndex", "RX2Frequency", "FactoryPresetFrequencies"]
+          }
+        }
+      ],
+
+      "required": ["DeviceProfileID", "SupportsClassB", "SupportsClassC", "MACVersion", "RegionalParametersVersion", "Region", "SupportsJoin", "MaxEIRP"]
+    }
+  },
+
+  "anyOf": [{ "$ref": "#/definitions/endDeviceProfile" }],
+
+  "type": ["object", "array"]
+}

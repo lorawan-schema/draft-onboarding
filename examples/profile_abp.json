@@ -1,0 +1,17 @@
+{
+  "DeviceProfileID": "ExampleABP",
+  "SupportsClassB": false,
+  "SupportsClassC": false,
+  "MACVersion": "1.0.4",
+  "RegionalParametersVersion": "RP002-1.0.1",
+  "Region": "EU863-870",
+  "SupportsJoin": false,
+  "RX1Delay": 1,
+  "RX1DataRateOffset": 0,
+  "RX2DataRateIndex": 3,
+  "RX2Frequency": 869.525,
+  "FactoryPresetFrequencies": [868.1, 868.3, 868.5, 867.1, 867.3, 867.5, 867.7, 867.9],
+  "MaxEIRP": 14,
+  "MaxDutyCycle": 0.1,
+  "Supports32bitFCnt": true
+}
